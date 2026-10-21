@@ -10,7 +10,6 @@ const progressTrack = document.querySelector("#progress-track");
 const progressFill = document.querySelector("#progress-fill");
 const answeredCount = document.querySelector("#answered-count");
 const answers = Array(questions.length).fill(null);
-let secondsRemaining = EXAM_DURATION_SECONDS;
 let examDeadline;
 let timerInterval;
 let examFinished = false;
@@ -49,17 +48,18 @@ function updateProgress() {
 
 // El tiempo se calcula contra la hora de fin: si el celular frena el intervalo (pestaña en segundo plano), al volver el reloj se pone al día.
 function updateTimer() {
-  if (examDeadline) secondsRemaining = Math.max(0, Math.ceil((examDeadline - Date.now()) / 1000));
+  const secondsRemaining = Math.max(0, Math.ceil((examDeadline - Date.now()) / 1000));
   timerElement.textContent = formatTime(secondsRemaining);
   timerElement.classList.toggle("timer-warning", secondsRemaining <= 120);
+  if (secondsRemaining === 0) finishExam();
 }
 
 function finishExam() {
   if (examFinished) return;
   examFinished = true;
-  window.clearInterval(timerInterval);
+  clearInterval(timerInterval);
 
-  const correctAnswers = answers.reduce((total, answer, index) => total + (answer === questions[index].answer ? 1 : 0), 0);
+  const correctAnswers = answers.filter((answer, index) => answer === questions[index].answer).length;
   const percentage = Math.round((correctAnswers / questions.length) * 100);
   const message = percentage < 40
     ? "¡Bien! Hay mucho por mejorar, pero estamos a tiempo. Contactame y comencemos ya a planificar tu aprendizaje."
@@ -86,10 +86,7 @@ function startExam() {
   examDeadline = Date.now() + EXAM_DURATION_SECONDS * 1000;
   updateTimer();
   window.scrollTo({ top: 0, behavior: "smooth" });
-  timerInterval = window.setInterval(() => {
-    updateTimer();
-    if (secondsRemaining <= 0) finishExam();
-  }, 1000);
+  timerInterval = setInterval(updateTimer, 1000);
 }
 
 document.querySelector("#start-test").addEventListener("click", startExam);
@@ -102,16 +99,13 @@ window.addEventListener("beforeunload", (event) => {
 });
 
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden || !examDeadline || examFinished) return;
-  updateTimer();
-  if (secondsRemaining <= 0) finishExam();
+  if (!document.hidden && examDeadline && !examFinished) updateTimer();
 });
 
-quizForm.addEventListener("change", (event) => {
-  const input = event.target;
-  if (!(input instanceof HTMLInputElement) || input.type !== "radio") return;
-  const questionIndex = Number(input.name.replace("question-", ""));
-  answers[questionIndex] = Number(input.value);
+// Los únicos campos del formulario son los radios de las respuestas.
+quizForm.addEventListener("change", ({ target }) => {
+  const questionIndex = Number(target.name.replace("question-", ""));
+  answers[questionIndex] = Number(target.value);
   updateProgress();
 });
 
