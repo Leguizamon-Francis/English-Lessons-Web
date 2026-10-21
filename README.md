@@ -1,8 +1,8 @@
 # English Lessons · Darlene Leguizamon
 
-Sitio web profesional para una profesora particular de inglés de Buenos Aires. Es una landing con un objetivo concreto: que quien entra sepa enseguida qué tipo de clases hay, pueda medir su nivel con un test online y escriba por WhatsApp con la consulta ya redactada.
+Sitio web para Darlene, ella es profesora particular de inglés en Buenos Aires. 
 
-**🔗 En vivo: [englishlessons.com.ar](https://englishlessons.com.ar)**
+**🔗 Web activa: [englishlessons.com.ar](https://englishlessons.com.ar)**
 
 <p align="center">
   <img src="docs/captura-inicio.webp" alt="Inicio del sitio en escritorio: ilustración de Darlene estudiando, cuatro nubes con las modalidades de clase y el recuadro del test de nivel" width="760">
@@ -16,14 +16,13 @@ Sitio web profesional para una profesora particular de inglés de Buenos Aires. 
 
 ## Qué resuelve
 
-Quien busca clases de inglés suele tener dos dudas: si la profesora ofrece lo que necesita y qué nivel tiene. El inicio responde las dos.
+Quien ingresa al sitio, debe identificar simplemente qué tipo de clases da y debe tener acceso inmediato a la comunicación con Darlene vía WhatsApp. La opción de medir su nivel con un Test Online inmediato nos da una sesación de acercamiento a la docente, y un espacio de itneracción agradable.
 
-- **Cuatro nubes, cuatro objetivos** (clases presenciales, virtuales, preparar un examen, mantener el nivel). Cada una abre WhatsApp con un mensaje según el motivo, o Google Maps en el caso de las clases presenciales.
-- **Un test de nivel** de 15 preguntas y 20 minutos. Al terminar, el botón de WhatsApp lleva el resultado escrito:
+- **Cuatro nubes, cuatro objetivos** (clases presenciales, virtuales, preparar un examen, mantener el nivel). Cada una abre WhatsApp con un mensaje según el motivo, o Google Maps con la ubicacion de referencia en el caso de las clases presenciales, digo de referencia ya que por seguridad Darlene prefirió no poner su dirección exacta.
+- **Un test de nivel** de 15 preguntas y 20 minutos de tiempo limite. Al terminar, un botón de WhatsApp lleva el resultado escrito para intercambiar esa información:
 
 > Hola Darlene! Hice el test de nivel de inglés y saqué 73% (11 de 15 correctas).
 
-Así Darlene recibe la consulta con el nivel del alumno, y el alumno solo tiene que tocar *Enviar*.
 
 <p align="center">
   <img src="docs/captura-test.webp" alt="Test de nivel en curso: contador de respuestas, temporizador y preguntas de opción múltiple" width="640">
@@ -31,7 +30,7 @@ Así Darlene recibe la consulta con el nivel del alumno, y el alumno solo tiene 
 
 ## Funcionalidades
 
-- **Nubes ancladas a la ilustración:** en escritorio, las nubes y el recuadro del test se ubican con coordenadas de la imagen de fondo (1746 × 901 px) usando *container queries*. Siempre quedan en el mismo lugar del dibujo, con cualquier tamaño y proporción de ventana.
+- **Nubes ancladas a la ilustración:** en la sección Inicio, las nubes y el recuadro del test se ubican con coordenadas de la imagen de fondo (1746 × 901 px) usando *container queries*. Siempre quedan en el mismo lugar del dibujo, con cualquier tamaño y proporción de ventana.
 - **Test sin backend:** las preguntas están en un archivo aparte ([js/questions.js](js/questions.js)), así que se pueden cambiar sin tocar la lógica. Hay barra de progreso, aviso antes de cerrar la pestaña con el test empezado y confirmación si quedan preguntas sin responder.
 - **Privacidad:** el test no guarda ni envía nada. El resultado se comparte solo si la persona toca el botón de WhatsApp.
 - **Diseño adaptable:** tres diseños (escritorio, tablet y celular). En celular la ilustración ocupa la primera pantalla, las nubes pasan a ser fondos SVG y toda la nube se puede tocar.
@@ -39,8 +38,7 @@ Así Darlene recibe la consulta con el nivel del alumno, y el alumno solo tiene 
 
 ## Detalles técnicos
 
-| | |
-|---|---|
+
 | **Stack** | HTML, CSS y JavaScript sin frameworks, sin dependencias y sin paso de build |
 | **Peso** | ~135 KB la página de inicio y ~35 KB la del test (sin contar las tipografías). El retrato pasó de 148 KB en JPG a 31 KB en WebP |
 | **SEO** | Datos estructurados `schema.org/LocalBusiness` para búsquedas locales, Open Graph para la vista previa en WhatsApp y redes, `sitemap.xml`, `robots.txt` y URL canónica |
