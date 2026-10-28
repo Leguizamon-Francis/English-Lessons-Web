@@ -96,7 +96,32 @@ input:focus-visible + .answer-marker { outline: 3px solid var(--terracotta); out
 .brush-copy a { text-underline-offset: 2px; transition: color .2s ease; }
 .brush-copy a:hover { color: var(--terracotta); }
 .hero-cloud-shape { display: none; }
+/* Caminos de puntos (en PC y celular, no en tablet): se dibujan con una máscara cuando la sección entra en pantalla (.is-visible, ver main.js); el del inicio ya la trae puesta.
+   Inicio: sale del libro del dibujo, pasa entre las nubes y termina en el test (coordenadas de la imagen; en celular, .trail-phone: sale del libro por abajo).
+   Sobre mí: rodea la foto. Contacto: termina en un avioncito. */
+.trail { --trail-color: #F7E6D3; display: none; overflow: visible; pointer-events: none; }
+.trail-line { fill: none; stroke: var(--trail-color); stroke-dasharray: 0 10; stroke-linecap: round; stroke-width: 2.6; opacity: .9; }
+.trail-pen { fill: none; stroke: #fff; stroke-dasharray: 1; stroke-dashoffset: 1; stroke-width: 12; animation: trail-draw 3.2s .4s cubic-bezier(.45, .1, .35, 1) forwards paused; }
+.trail-stars { fill: var(--trail-color); opacity: 0; animation: trail-fade 1.2s 2.8s ease forwards paused; }
+.trail.is-visible .trail-pen,
+.trail.is-visible .trail-stars { animation-play-state: running; }
+@keyframes trail-draw { to { stroke-dashoffset: 0; } }
+@keyframes trail-fade { to { opacity: .9; } }
+/* La foto cambia de tamaño: el dibujo se estira con ella y el trazo mantiene el grosor y los puntos con non-scaling-stroke. */
+.trail-box { --trail-color: #E0846A; position: absolute; inset: 0; }
+.trail-box svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.trail-box .trail-line { stroke-width: 2.8; vector-effect: non-scaling-stroke; }
+.trail-box .trail-pen { stroke-width: 7; animation-duration: 2.4s; }
+.trail-box .trail-spark { top: auto; right: auto; bottom: auto; left: auto; width: 16px; height: 16px; animation-delay: 2.2s; }
+.portrait-trail .trail-spark { top: 19%; left: max(-34px, 4px - (100vw - min(100vw - 48px, var(--content))) / 2); }
+.contact-heading { position: relative; }
+.contact-trail { position: absolute; top: -90px; right: 0; width: 560px; height: 300px; opacity: .75; }
+.contact-trail .trail-line { vector-effect: non-scaling-stroke; }
+.contact-trail .trail-plane { fill: none; stroke: var(--trail-color); stroke-linejoin: round; stroke-width: 1.6; vector-effect: non-scaling-stroke; }
 @media (min-width: 901px) {
+  .trail { display: block; }
+  .trail-phone { display: none; }
+  .hero-trail { position: absolute; inset: 0; width: 100%; height: 100%; }
   .hero-canvas { --px: calc(100cqw / 1746); }
   .hero-options { display: contents; }
   .brush-item { position: absolute; top: calc(var(--y) * var(--px)); left: calc(var(--x) * var(--px)); display: block; width: calc(var(--w) * var(--px)); min-height: 0; }
@@ -157,8 +182,12 @@ input:focus-visible + .answer-marker { outline: 3px solid var(--terracotta); out
 .contact-link span:nth-child(2) { overflow-wrap: anywhere; font-size: 15px; }
 .contact-link small { display: block; margin-bottom: 3px; color: var(--cream-pink); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .contact-arrow { color: var(--peach); }
-.site-footer { display: flex; min-height: 83px; align-items: center; justify-content: space-between; gap: 16px; padding: 16px clamp(24px, 5vw, 76px); color: var(--hair-brown); background: var(--warm-white); font-size: 11px; }
+.site-footer { display: flex; min-height: 83px; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; padding: 16px clamp(24px, 5vw, 76px); color: var(--hair-brown); background: var(--warm-white); font-size: 11px; }
 .site-footer .wordmark { font-size: 16px; }
+/* Línea de cierre abajo de todo: copyright y crédito del desarrollo. */
+.site-credit { width: 100%; margin: 0; padding-top: 12px; border-top: 1px solid rgb(48 23 10 / 10%); text-align: center; }
+.site-credit a { color: var(--terracotta); font-weight: 700; text-underline-offset: 2px; transition: color .2s ease; }
+.site-credit a:hover { color: var(--dark-brown); }
 .back-top { color: var(--hair-brown); text-decoration: none; }
 .reveal { opacity: 0; transform: translateY(15px); transition: opacity .65s ease, transform .65s ease; }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
@@ -283,10 +312,20 @@ input:focus-visible + .answer-marker { outline: 3px solid var(--terracotta); out
   .training-item + .training-item { padding: 17px 0 0; border-top: 1px solid var(--soft-salmon); border-left: 0; }
   .contact-inner { gap: 35px; }
   .contact-heading h2 { max-width: 320px; font-size: 40px; line-height: 1.12; }
+  /* Caminos de puntos en celular. El del inicio copia el encuadre del fondo (.hero::before) para seguir en coordenadas de la imagen. */
+  .trail { display: block; }
+  .trail-desk { display: none; }
+  .hero-trail { position: absolute; top: 56px; left: calc(50% - var(--hero-img) * .4306); width: calc(var(--hero-img) * 1746 / 901); height: var(--hero-img); }
+  /* El óvalo se agranda alrededor de la foto (en celular casi no tiene aire arriba y abajo) y la entrada se corta justo arriba de la sección. */
+  .portrait-trail { inset: -36px -16px; }
+  .portrait-trail svg { clip-path: inset(-10px -100px -100px); }
+  .portrait-trail .trail-spark { top: 24%; left: -34px; }
+  .contact-section { padding-top: 116px; }
+  .contact-trail { top: -112px; width: 280px; height: 150px; }
+  .contact-trail .trail-line { stroke-dasharray: 0 6.5; stroke-width: 2.2; }
   .contact-link { gap: 11px; min-height: 82px; }
   .contact-link span:nth-child(2) { font-size: 13px; }
-  .site-footer { flex-wrap: wrap; padding-inline: 21px; }
-  .site-footer > span { order: 3; width: 100%; text-align: center; }
+  .site-footer { padding-inline: 21px; }
   .test-main { padding-block: 27px 44px; }
   .test-header .back-link { font-size: 11px; }
   .test-panel,

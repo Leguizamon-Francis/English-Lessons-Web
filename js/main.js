@@ -1,4 +1,4 @@
-document.querySelector("#current-year").textContent = new Date().getFullYear();
+document.querySelector(".current-year").textContent = new Date().getFullYear();
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -8,4 +8,4 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 
-document.querySelectorAll(".reveal").forEach((item) => revealObserver.observe(item));
+document.querySelectorAll(".reveal, .trail:not(.is-visible)").forEach((item) => revealObserver.observe(item));

@@ -1,3 +1,5 @@
+document.querySelector(".current-year").textContent = new Date().getFullYear();
+
 const EXAM_DURATION_SECONDS = 20 * 60;
 
 const welcomeScreen = document.querySelector("#test-welcome");
